@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waypoint - Autonomous AI Trip Planner</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- LAYER 1: REGISTRATION GATE -->
+    <div id="authScreen" class="container">
+        <h2>Create Account</h2>
+        <div class="subtitle">Join Waypoint to unlock automated itineraries</div>
+        
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Choose a custom username">
+
+        <label for="email">Email Address</label>
+        <input type="email" id="email" placeholder="name@example.com">
+
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Create a password">
+
+        <button onclick="handleRegister()">Create Account</button>
+    </div>
+
+    <!-- LAYER 2: THE MAIN SYSTEM WORKSPACE -->
+    <div id="appScreen">
+        
+        <!-- Welcome Jumbotron -->
+        <div class="welcome-hero" id="welcomeHeroSection">
+            <h2>Welcome to Waypoint, <span id="profileName">User</span>! 🎉</h2>
+            <p>Your autonomous travel layout tracker is online.</p>
+            <div class="scroll-down-hint">▼ Scroll down to enter your destination details ▼</div>
+        </div>
+
+        <!-- Inputs Form Module -->
+        <div class="container" id="plannerInputsSection">
+            <h1>🎒 AI Travel Dashboard</h1>
+            <div class="subtitle">Provide your constraints and let the system run the calculations</div>
+            
+            <!-- STEP 1 -->
+            <label for="destination">Where are you going?</label>
+            <div class="autocomplete-wrapper">
+                <input type="text" id="destination" placeholder="Start typing a location (e.g. America, Delhi)" autocomplete="off" oninput="handleSimulatedInput(this.value)">
+                <div id="suggestionsBox" class="custom-suggestions"></div>
+            </div>
+
+            <!-- STEP 2 -->
+            <div id="transportFieldContainer" style="display: none; margin-top: 15px; border-top: 1px dashed #ccc; padding-top: 15px;">
+                <label for="transportMethod">Select Mode of Transport</label>
+                <select id="transportMethod" onchange="handleTransportChange()" style="width: 100%; padding: 12px; margin-top: 8px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; background: white;">
+                    <option value="" disabled selected>-- Choose your transit method --</option>
+                    <option value="railways">🚂 Railways (Train)</option>
+                    <option value="bus">🚌 Bus Transport</option>
+                    <option value="car">🚗 Car / Personal Vehicle</option>
+                    <option value="plane">✈️ Flight (Plane)</option>
+                </select>
+            </div>
+
+            <!-- STEP 3 -->
+            <div id="daysFieldContainer" style="display: none; margin-top: 15px; border-top: 1px dashed #ccc; padding-top: 15px;">
+                <label for="tripDays">Number of Days</label>
+                <input type="number" id="tripDays" placeholder="How many days are you staying?" min="1" oninput="handleDaysInput(this.value)">
+                <div id="daysOverlayHint" style="font-size: 12px; color: #2980b9; background-color: #ebf5fb; padding: 6px 10px; border-radius: 4px; margin-top: 5px; font-weight: bold; border-left: 3px solid #3498db;">
+                    Calculating recommended parameters...
+                </div>
+            </div>
+
+            <!-- STEP 4 -->
+            <div id="budgetFieldContainer" style="display: none; margin-top: 15px; border-top: 1px dashed #ccc; padding-top: 15px;">
+                <label for="tripBudget">Your Max Budget Allocation (INR)</label>
+                <input type="number" id="tripBudget" placeholder="Enter your budget ceiling limit amount">
+                <div id="budgetOverlayHint" style="font-size: 12px; color: #d35400; background-color: #fdf2e9; padding: 6px 10px; border-radius: 4px; margin-top: 5px; font-weight: bold; border-left: 3px solid #e67e22;">
+                    Absolute minimum baseline budget required: Calculating...
+                </div>
+            </div>
+
+            <!-- STREAM LOGS FOR LIVE SCRAPING FEED -->
+            <div id="webSearchContainer" style="display: none; margin-top: 15px; background: #f4ecf7; border-left: 4px solid #8e44ad; padding: 12px; border-radius: 4px;">
+                <div style="font-weight: bold; color: #8e44ad; font-size: 13px; display: flex; align-items: center;">
+                    🌐 <span id="searchStatusText">Connecting to internet registers...</span>
+                </div>
+                <div id="webSearchResults" style="font-size: 13px; color: #4a235a; margin-top: 8px; line-height: 1.4; font-style: italic;">
+                    Fetching geo summaries...
+                </div>
+            </div>
+
+            <!-- SUBMIT ACTION SWITCH -->
+            <button id="generateBtn" onclick="startAutonomousAI()" style="background-color: #8e44ad; display: none; margin-top: 25px;">🚀 Generate Waypoint Itinerary</button>
+
+            <!-- CONTAINER MODULE FOR RENDERED TIMETABLES -->
+            <div class="itinerary-section" id="itinerarySection" style="display: none;">
+                <div id="budgetStatusBadge" style="padding: 10px; border-radius: 6px; font-weight: bold; text-align: center; margin-bottom: 25px; font-size: 14px;"></div>
+                <h3>✨ Autonomous Itinerary Generated</h3>
+                <ul id="itineraryList"></ul>
+            </div>
+            
+            <button class="logout-btn" onclick="handleLogout()">Log Out Account</button>
+        </div>
+    </div>
+
+    <!-- LINK SYSTEM CONTROLLERS -->
+    <script src="auth.js"></script>
+    <script src="router.js"></script>
+    <script src="ai-agent.js"></script>
+</body>
+</html>
